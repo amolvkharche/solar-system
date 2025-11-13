@@ -219,7 +219,7 @@ jobs:
                 --from-literal=MONGO_PASSWORD=${{secrets.MONGO_PASSWORD}} \
                 --from-literal=MONGO_USERNAME=${{vars.MONGO_USERNAME}} \
                 --save-config \
-                --dry-run=client
+                --dry-run=client \
                 -o yaml | kubectl apply -f -
 
             - name: Deploy to dev environment 
