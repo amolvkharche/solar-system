@@ -184,7 +184,7 @@ jobs:
                 method: kubeconfig
                 kubeconfig: ${{secrets.KUBECONFIG}}
 
-            - name: Fetch K8s cluster details
+            - name: Fetch Kuberntes cluster details
               run: |
                 kubectl version
                 echo --------------------
