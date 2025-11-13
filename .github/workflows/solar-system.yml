@@ -168,6 +168,8 @@ jobs:
     
     dev-deploy:
         needs: docker
+        outputs:
+          APP_INGRESS_URL: ${{steps.set-ingress-host-addr.outputs.APP_INGRESS_HOST}}
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
@@ -226,12 +228,19 @@ jobs:
               run: |
                 kubectl apply -f kubernetes/development
 
+            - name: Setup Ingress host URL
+              id: set-ingress-host-addr
+              run: |
+                echo "APP_INGRESS_HOST=$(kubectl get ingress -n development  | awk '{print $3}' | grep -v HOSTS)" >> "$GITHUB_OUTPUT"
+
     integration-testing:
         name: Dev integration testing 
         needs: dev-deploy
         runs-on: ubuntu-latest
         steps:
             - name: Test URL output using CURL and JQ
+              env:
+                URL: ${{needs.dev-deploy.outputs.APP_INGRESS_URL}}
               run: |
                 echo $URL
                 echo "----------------------------------"
