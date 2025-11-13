@@ -184,6 +184,11 @@ jobs:
                 method: kubeconfig
                 kubeconfig: ${{secrets.KUBECONFIG}}
 
+            - name: Make kubeconfig skip TLS verification (insecure)
+              run: |
+                CLUSTER_NAME=$(kubectl config view -o jsonpath='{.clusters[0].name}')
+                kubectl config set-cluster "$CLUSTER_NAME" --insecure-skip-tls-verify=true
+
             - name: Fetch Kuberntes cluster details
               run: |
                 kubectl version
