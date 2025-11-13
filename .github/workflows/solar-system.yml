@@ -168,6 +168,7 @@ jobs:
     
     dev-deploy:
         needs: docker
+        if: contains(github.ref,'feature/')
         environment: 
             name: development
             url: https://${{steps.set-ingress-host-addr.outputs.APP_INGRESS_HOST}}
@@ -238,6 +239,7 @@ jobs:
 
     dev-integration-testing:
         name: Dev integration testing 
+        if: contains(github.ref,'feature/')
         needs: dev-deploy
         runs-on: ubuntu-latest
         steps:
@@ -253,7 +255,8 @@ jobs:
         
                     
     prod-deploy:
-        needs: dev-integration-testing
+        needs: docker
+        if: github.ref == 'refs/heads/main'
         environment: 
             name: production
             url: https://${{steps.set-ingress-host-addr.outputs.APP_INGRESS_HOST}}
@@ -325,6 +328,7 @@ jobs:
     prod-integration-testing:
         name: Prod integration testing 
         needs: prod-deploy
+        if: github.ref == 'refs/heads/main'
         runs-on: ubuntu-latest
         steps:
             - name: Test URL output using CURL and JQ
