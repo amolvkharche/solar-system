@@ -247,7 +247,7 @@ jobs:
                  if [ "$http_code" -ne 200 ]; then
                     echo "/live did not return 200"
                     exit 1
-                fi
+                 fi
                 
                     
             
