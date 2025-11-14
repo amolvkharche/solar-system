@@ -109,12 +109,12 @@ jobs:
         runs-on: ubuntu-latest
         continue-on-error: true
         steps:
-            - name: Download Mocha Test artifact
+            - name: Download Mocha Test Artifact
               uses: actions/download-artifact@v4
               with:
                 name: Mocha-Test-Result
 
-            - name: Download Mocha test artifact
+            - name: Download Mocha test artifact code coverage
               uses: actions/download-artifact@v4
               with:
                 name: code-coverage-result
