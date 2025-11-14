@@ -124,9 +124,9 @@ jobs:
                 ls -ltr
                 mkdir reports-${{github.sha}} 
                 chmod 755 reports-${{github.sha}}
-                mv cobertura-coverage.xml reports-${{github.sha}} /
-                mv test-results.xml reports-${{github.sha}} /
-                ls -ltr reports-${{github.sha}} /
+                mv cobertura-coverage.xml reports-${{github.sha}} 
+                mv test-results.xml reports-${{github.sha}} 
+                ls -ltr reports-${{github.sha}} 
 
             - name: Upload to AWS S3 
               uses: jakejarvis/s3-sync-action@master
