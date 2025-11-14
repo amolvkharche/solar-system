@@ -39,15 +39,10 @@ jobs:
           with:
             node-version: ${{matrix.nodejs_version}}
         
-        - name: Cache NPM dependencies
-          uses: actions/cache@v3
+        - name: NPM composite action for cache and install dependencies
+          uses: ./.github/custom-actions/npm-action
           with:
-            path: node_modules
-            key: ${{runner.os}}-node-modules-${{hashFiles('package-lock.json')}}
-
-
-        - name: Install dependencies
-          run: npm install
+            folder-path: node-modules  # secrets.NAME 
 
         - name: Unit Testing
           id: node-js-test
@@ -77,20 +72,11 @@ jobs:
         steps:
         - name: Checkout repository
           uses: actions/checkout@v4
-
-       # - name: Setup NodeJS version - 18
-        #  uses: actions/setup-node@v3
-         # with:
-          #  node-version: 18
         
-        - name: Cache NPM dependencies
-          uses: actions/cache@v3
+        - name: NPM composite action for cache and install dependencies
+          uses: ./.github/custom-actions/npm-action
           with:
-            path: node_modules
-            key: ${{runner.os}}-node-modules-${{hashFiles('package-lock.json')}}
-
-        - name: Install dependencies
-          run: npm install
+            folder-path: node-modules  # secrets.NAME 
 
         - name: Check code coverage
           continue-on-error: true
