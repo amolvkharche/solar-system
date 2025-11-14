@@ -103,6 +103,44 @@ jobs:
             path: coverage
             retention-days: 5
 
+    report-s3:
+        name: AWS S3 Upload reports
+        needs: [unit-testing,code-coverage]
+        runs-on: ubuntu-latest
+        continue-on-error: true
+        steps:
+            - name: Download Mocha test artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: Mocha-Test-Result-${{matrix.operating_system}}-${{matrix.nodejs_version}}
+
+            - name: Download Mocha test artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: code-coverage-result
+
+            - name: Merge Test files
+              run: |
+                ls -ltr
+                mkdir reports-${{github.sha}}
+                mv cobertura-coverage.xml reports-${{github.sha}} /
+                mv test-results.xml reports-${{github.sha}} /
+                ls -ltr reports-${{github.sha}} /
+
+            - name: Upload to AWS S3 
+              uses: jakejarvis/s3-sync-action@master
+              with:
+                 args: --acl public-read --follow-symlinks --delete
+              env:
+                AWS_S3_BUCKET: solar-system-reports-bucket-amolk
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                AWS_REGION: 'ap-south-1' 
+                SOURCE_DIR: 'reports-${{github.sha}}'
+                DEST_DIR: 'reports-${{github.sha}}'
+
+                
+
     docker:
         needs: [unit-testing, code-coverage]
         name: Containerization
@@ -251,8 +289,6 @@ jobs:
                 echo $URL
                 echo "----------------------------------"
                 curl https://$URL/live -s -k | jq -r .status | grep -i live
-                
-        
                     
     prod-deploy:
         needs: docker
