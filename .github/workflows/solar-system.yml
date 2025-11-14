@@ -122,7 +122,8 @@ jobs:
             - name: Merge Test files
               run: |
                 ls -ltr
-                mkdir reports-${{github.sha}}
+                mkdir reports-${{github.sha}} /
+                chmod 755 reports-${{github.sha}} /
                 mv cobertura-coverage.xml reports-${{github.sha}} /
                 mv test-results.xml reports-${{github.sha}} /
                 ls -ltr reports-${{github.sha}} /
